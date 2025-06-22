@@ -28,7 +28,7 @@ const Input = ({
         <label className="text-md font-medium">
           {label}
           {required && (
-            <span className="text-danger text-lg font-medium"> *</span>
+            <span className="text-danger text-lg font-medium">*</span>
           )}
         </label>
       )}
@@ -79,9 +79,7 @@ const Input = ({
         )}
       </div>
 
-      {error && (
-        <span className="text-danger text-sm font-medium">{error}</span>
-      )}
+      {error && <span className="text-danger text-sm ">{error}</span>}
 
       {helper && <span className="text-sm text-placeholder ">{helper}</span>}
     </div>

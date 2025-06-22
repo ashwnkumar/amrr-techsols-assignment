@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { saveFormData } from "../utils/indexedDb";
 import Button from "../components/form/Button";
 import { Plus, ShoppingCart } from "lucide-react";
+import PageHeader from "../components/PageHeader";
 
 const AddProduct = () => {
   const [formData, setFormData] = useState({
@@ -11,8 +12,11 @@ const AddProduct = () => {
     description: "",
     type: "",
     coverImage: "",
-    additionalImages: [],
+    additionalImage1: "",
+    additionalImage2: "",
+    additionalImage3: "",
   });
+  const [errors, setErrors] = useState({});
 
   const itemTypeOptions = [
     { value: "shirt", option: "Shirt" },
@@ -21,11 +25,33 @@ const AddProduct = () => {
     { value: "other", option: "Other" },
   ];
 
+  const validateForm = () => {
+    let errors = {};
+
+    if (!formData.name) {
+      errors.name = "Name is required";
+    }
+    if (!formData.type) {
+      errors.type = "Type is required";
+    }
+
+    if (!formData.coverImage) {
+      errors.coverImage = "Cover Image is required";
+    }
+
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async () => {
+    if (!validateForm())
+      return toast.error("Please fill in all the required fields");
+
     try {
       await saveFormData(formData);
       toast.success("Product added successfully");
     } catch (error) {
+      console.log("Error adding product", error);
       toast.error("There was an error adding the product");
     } finally {
       setFormData({
@@ -43,12 +69,20 @@ const AddProduct = () => {
       ...formData,
       [name]: value,
     });
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
   };
 
-  const handleFileChange = (file) => {
+  const handleFileChange = (file, name) => {
     setFormData({
       ...formData,
-      coverImage: file,
+      [name]: file,
+    });
+    setErrors({
+      ...errors,
+      [name]: "",
     });
   };
 
@@ -57,9 +91,14 @@ const AddProduct = () => {
       ...formData,
       [name]: option.value,
     });
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
   };
   const formOptions = [
     {
+      title: "Product Details",
       fields: [
         {
           formType: "input",
@@ -70,6 +109,7 @@ const AddProduct = () => {
           required: true,
           value: formData.name,
           onChange: handleInputChange,
+          error: errors.name,
         },
         {
           formType: "dropdown",
@@ -79,6 +119,7 @@ const AddProduct = () => {
           required: true,
           value: formData.type,
           onChange: (option) => handleDropdownChange(option, "type"),
+          error: errors.type,
         },
         {
           formType: "textarea",
@@ -86,10 +127,15 @@ const AddProduct = () => {
           name: "description",
           type: "textarea",
           placeholder: "Enter Item Description",
-          required: true,
+
           value: formData.description,
           onChange: handleInputChange,
         },
+      ],
+    },
+    {
+      title: "Product Images",
+      fields: [
         {
           formType: "file",
           label: "Cover Image",
@@ -97,41 +143,58 @@ const AddProduct = () => {
           type: "file",
           acceptedFiles: ".jpg, .jpeg, .png",
           required: true,
-          onChange: handleFileChange,
+          value: formData.coverImage,
+          onChange: (file) => handleFileChange(file, "coverImage"),
+          error: errors.coverImage,
         },
         {
           formType: "file",
-          label: "Additional Images",
-          name: "additionalImages",
+          label: "Additional Image 1",
+          name: "additionalImage1",
           type: "file",
-          required: true,
-          onChange: handleFileChange,
+          value: formData.additionalImage1,
+          acceptedFiles: ".jpg, .jpeg, .png",
+          onChange: (file) => handleFileChange(file, "additionalImage1"),
+        },
+        {
+          formType: "file",
+          label: "Additional Image 2",
+          name: "additionalImage2",
+          type: "file",
+          value: formData.additionalImage2,
+          acceptedFiles: ".jpg, .jpeg, .png",
+          onChange: (file) => handleFileChange(file, "additionalImage2"),
+        },
+        {
+          formType: "file",
+          label: "Additional Image 3",
+          name: "additionalImage3",
+          type: "file",
+          value: formData.additionalImage3,
+          acceptedFiles: ".jpg, .jpeg, .png",
+          onChange: (file) => handleFileChange(file, "additionalImage3"),
         },
       ],
     },
   ];
+
+  const headerButtons = [
+    {
+      label: "Add Product",
+      icon: Plus,
+      onClick: handleSubmit,
+    },
+  ];
+
   return (
-    <div className="bg-white w-full max-w-md flex flex-col items-center justify-center gap-2 shadow p-4 rounded-lg m-4 max-h-[90vh]">
-      <div className="text-start w-full">
-        <h3 className="font-medium text-2xl">Add Items</h3>
-        <p className="text-secondary">Add your items here</p>
-      </div>
-      <div className="overflow-auto w-full">
-        <DynamicForm options={formOptions} submitText="Add Product" />
-      </div>
-      <Button
-        label={"Add Product"}
-        icon={Plus}
-        navTo={"/products"}
-        className="w-full"
+    <div className="w-full h-full  flex flex-col items-center justify-start gap-2 ">
+      <PageHeader
+        title="Add Product"
+        desc="Add a new product to your inventory"
+        buttons={headerButtons}
       />
-      <Button
-        label={"View Products"}
-        variant="outline"
-        icon={ShoppingCart}
-        navTo={"/products"}
-        className="w-full"
-      />
+
+      <DynamicForm options={formOptions} submitText="Add Product" />
     </div>
   );
 };

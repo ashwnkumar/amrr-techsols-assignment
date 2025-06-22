@@ -14,7 +14,7 @@
   --color-secondary: #344054;
   --color-placeholder: #667085;
 
-  --color-danger: #f04438;
+  --color-danger: #dc2626;
   --color-danger-faded: #fef3f2;
 
   --color-success: #12b76a;
@@ -27,5 +27,5 @@
   --color-neutral-faded: #eef4ff;
 
   --color-white: #ffffff;
-  /* --color-dark: #0c0e12; */
+  /* --color-dark: #0c0e12;*/
 }

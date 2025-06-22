@@ -10,6 +10,7 @@ const ModalComponent = ({
   children,
   message,
   buttons = [],
+  onClose,
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -24,6 +25,7 @@ const ModalComponent = ({
 
   const closeModal = () => {
     setIsOpen(null);
+    onClose?.();
   };
 
   return (
@@ -33,13 +35,13 @@ const ModalComponent = ({
       style={{ zIndex: 999999 }}
     >
       <div
-        className="bg-white rounded-md w-full max-w-xl max-h-[90vh] flex flex-col px-5 py-3 m-3 overflow-hidden"
+        className="bg-white rounded-xl w-full max-w-xl max-h-[90vh] flex flex-col px-5 py-3 m-3 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
+        {/* Header*/}
         <div className="flex items-center justify-between w-full pb-2 sticky top-0 bg-light z-10">
           <div>
-            <h2 className="text-lg font-medium">{title}</h2>
+            <h2 className="text-xl font-medium">{title}</h2>
             {desc && <p className="font-normal">{desc}</p>}
           </div>
           <button
@@ -51,12 +53,12 @@ const ModalComponent = ({
           </button>
         </div>
 
-        {/* Body */}
+        {/* Body*/}
         <div className="w-full flex-1 overflow-y-auto custom-scrollbar">
           {message ? message : children}
         </div>
 
-        {/* Actions */}
+        {/* Actions*/}
         {buttons.length > 0 && (
           <div className="flex items-center justify-end w-full gap-4 pt-2 sticky bottom-0 bg-light z-10">
             {buttons.map((button, index) => (

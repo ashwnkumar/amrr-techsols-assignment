@@ -19,7 +19,7 @@ const Dropdown = ({
   canSearch = false,
   optionKey = "option",
   optionValue = "value",
-
+  error,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -69,7 +69,7 @@ const Dropdown = ({
         <label className="text-md  text-heading">
           {label}
           {required && (
-            <span className="text-danger text-lg font-medium"> *</span>
+            <span className="text-danger text-lg font-medium">*</span>
           )}
         </label>
       )}
@@ -78,9 +78,10 @@ const Dropdown = ({
         type="button"
         id={id}
         name={name}
-        className={`w-full border rounded-xl px-2 py-2 mt-2 bg-white transition-colors duration-150 font-normal flex justify-between items-center focus:border-brand focus:outline-none focus:ring-0 
+        className={`w-full border rounded-xl  px-2 py-2 mt-2 bg-white transition-colors duration-150 font-normal flex justify-between items-center focus:border-brand focus:outline-none focus:ring-0 
           ${disabled ? "bg-disabled cursor-not-allowed" : "cursor-pointer"} 
-          ${isOpen ? "border-brand" : "border-gray"} ${className}`}
+          ${error ? "border-danger" : "border-gray"}
+          ${isOpen && "border-brand"} ${className}`}
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
       >
@@ -134,6 +135,7 @@ const Dropdown = ({
         </div>
       )}
       {helper && <span className="text-sm text-placeholder ">{helper}</span>}
+      {error && <span className="text-danger text-sm ">{error}</span>}
     </div>
   );
 };

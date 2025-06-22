@@ -31,8 +31,8 @@ const Button = ({
     return (
       <Link to={navTo} className={commonClasses}>
         {label && <span>{label}</span>}
-        {children}
         {Icon && <Icon />}
+        {children}
       </Link>
     );
   }
@@ -48,8 +48,8 @@ const Button = ({
         <span className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin"></span>
       ) : (
         <>
-          {Icon && <Icon />}
           {label && !children && <span>{label}</span>}
+          {Icon && <Icon />}
           {children}
         </>
       )}

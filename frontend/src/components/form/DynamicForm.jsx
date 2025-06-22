@@ -30,6 +30,7 @@ const DynamicForm = ({
             onKeyDown={item.onKeyDown}
             disabled={item.disabled}
             helper={item.helper}
+            error={item.error}
           />
         );
       case "file":
@@ -39,10 +40,13 @@ const DynamicForm = ({
             label={item.label}
             name={item.name}
             id={item.id}
+            value={item.value}
             required={item.required}
             onFileSelect={item.onChange}
             existingImage={item.existingImage}
             acceptedFiles={item.acceptedFiles}
+            helper={item.helper}
+            error={item.error}
           />
         );
       case "textarea":
@@ -55,6 +59,7 @@ const DynamicForm = ({
             placeholder={item.placeholder || item.label}
             value={item.value}
             onChange={item.onChange}
+            error={item.error}
           />
         );
       case "dropdown":
@@ -71,6 +76,7 @@ const DynamicForm = ({
             helper={item.helper}
             valueKey={item.valueKey}
             optionKey={item.optionKey}
+            error={item.error}
           />
         );
 
@@ -87,25 +93,23 @@ const DynamicForm = ({
         <h4 className="text-lg font-medium mt-2 text-heading">{title}</h4>
       )}
       <form
-        className={`w-full flex flex-col gap-4 text-start ${className}`}
+        className={`w-full flex flex-col  gap-4 text-start divide-y divide-gray ${className}`}
         onSubmit={(e) => e.preventDefault()}
       >
         {options.map((section, idx) => (
           <div
             key={idx}
-            className={`flex flex-col items-start justify-center  gap-2 rounded-lg ${
-              options.length > 1 && "bg-gray/30 p-4 gap-2"
-            }`}
+            className={`flex flex-row items-start justify-between gap-2 rounded-lg`}
           >
-            <h5 className="text-lg font-semibold text-heading">
+            <h5 className="text-lg w-1/3 font-semibold text-heading">
               {section.title}
             </h5>
 
             {section.columns ? (
               // Multi-column layout
-              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 pb-2">
                 {section.columns.map((col, colIdx) => (
-                  <div key={colIdx} className="flex flex-col gap-2">
+                  <div key={colIdx} className="flex flex-col gap-2 ">
                     {col.title && (
                       <h6 className="text-sm font-medium mb-1">{col.title}</h6>
                     )}
@@ -115,7 +119,7 @@ const DynamicForm = ({
               </div>
             ) : (
               // Single-column layout
-              <div className="flex flex-col gap-2 w-full">
+              <div className="flex flex-col gap-2 w-1/2 pb-2">
                 {section.fields?.map(renderFormItem)}
               </div>
             )}

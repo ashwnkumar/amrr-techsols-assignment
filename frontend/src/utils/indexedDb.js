@@ -59,3 +59,23 @@ export async function getProducts() {
     };
   });
 }
+
+export async function clearDb() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.deleteDatabase("products");
+
+    request.onsuccess = () => {
+      console.log("Database deleted successfully.");
+      resolve(true);
+    };
+
+    request.onerror = () => {
+      console.error("Failed to delete database.");
+      reject(request.error);
+    };
+
+    request.onblocked = () => {
+      console.warn("Database deletion blocked — close other tabs using it.");
+    };
+  });
+}

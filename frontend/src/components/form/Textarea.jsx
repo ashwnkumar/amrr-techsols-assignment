@@ -21,7 +21,7 @@ const Textarea = ({
         <label className="text-md text-heading">
           {label}
           {required && (
-            <span className="text-danger text-lg font-medium"> *</span>
+            <span className="text-danger text-lg font-medium">*</span>
           )}
         </label>
       )}
