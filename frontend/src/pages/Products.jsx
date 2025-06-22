@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { clearDb, getProducts } from "../utils/indexedDb";
 import ModalComponent from "../components/ModalComponent";
-import { ArrowLeft, View } from "lucide-react";
+import { ArrowLeft, ChevronRight, View } from "lucide-react";
 import Button from "../components/form/Button";
 import PageHeader from "../components/PageHeader";
 import toast from "react-hot-toast";
@@ -146,23 +146,27 @@ const Products = () => {
             <div className="relative w-full h-[250px] flex items-center justify-center bg-gray-100 rounded">
               {imagesArray.length > 0 && (
                 <>
-                  <button
-                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded-full shadow"
-                    onClick={prevSlide}
-                  >
-                    <ArrowLeft className="w-5 h-5" />
-                  </button>
+                  {imagesArray.length > 1 && (
+                    <button
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded-full shadow"
+                      onClick={prevSlide}
+                    >
+                      <ArrowLeft className="w-5 h-5" />
+                    </button>
+                  )}
                   <img
                     src={imagesArray[currentIndex].imageUrl}
                     alt={imagesArray[currentIndex].title}
                     className="h-full object-contain rounded"
                   />
-                  <button
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded-full shadow rotate-180"
-                    onClick={nextSlide}
-                  >
-                    <ArrowLeft className="w-5 h-5" />
-                  </button>
+                  {imagesArray.length > 1 && (
+                    <button
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded-full shadow rotate-180"
+                      onClick={nextSlide}
+                    >
+                      <ArrowLeft className="w-5 h-5" />
+                    </button>
+                  )}
                   <div className="absolute bottom-2 text-xs bg-black/50 text-white px-2 py-1 rounded">
                     {imagesArray[currentIndex].title}
                   </div>
@@ -194,29 +198,38 @@ const Products = () => {
       />
 
       <div className="w-full flex flex-col gap-2  overflow-y-auto">
-        {products.map((item) => {
-          const imageUrl = getImageUrl(item.coverImage);
+        {products.length > 0 ? (
+          products.map((item) => {
+            const imageUrl = getImageUrl(item.coverImage);
 
-          return (
-            <div
-              onClick={() => handleItemClick(item)}
-              key={item.id}
-              className="w-full flex flex-row items-center justify-start gap-2 hover:bg-hover rounded-lg p-2 cursor-pointer active:transform-y-0.5 transition-transform"
-            >
-              {imageUrl ? (
-                <img
-                  src={imageUrl}
-                  alt="Cover Preview"
-                  className="size-20 object-cover rounded-md"
-                  onLoad={() => URL.revokeObjectURL(imageUrl)}
-                />
-              ) : (
-                <div className="size-20 bg-gray-200 rounded" />
-              )}
-              <p>{item.name}</p>
-            </div>
-          );
-        })}
+            return (
+              <div
+                onClick={() => handleItemClick(item)}
+                key={item.id}
+                className="w-full flex border border-gray flex-row items-center justify-between gap-2 hover:bg-hover rounded-lg p-3 cursor-pointer active:transform-y-0.5 transition-transform"
+              >
+                <div className="flex items-center gap-2">
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt="Cover Preview"
+                      className="size-20 object-cover rounded-md"
+                      onLoad={() => URL.revokeObjectURL(imageUrl)}
+                    />
+                  ) : (
+                    <div className="size-20 bg-gray-200 rounded" />
+                  )}
+                  <p>{item.name}</p>
+                </div>
+                <ChevronRight />
+              </div>
+            );
+          })
+        ) : (
+          <div className="w-full flex flex-col items-center justify-center">
+            <p className="text-secondary text-lg">No products found</p>
+          </div>
+        )}
       </div>
     </div>
   );
